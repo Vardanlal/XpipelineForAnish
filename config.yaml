@@ -1,0 +1,95 @@
+# Twitter usernames to fetch tweets from
+usernames:
+  - ultrawavetrader
+  - yuriymatso
+  - KISSOrderFlow
+  - QuiverQuant
+  - jestertrading33
+  - Tr3v0rH
+  - spotgamma
+  - TrendSpider
+  - CheddarFlow
+  - jestertrading33
+  - LindaRaschke
+  - satoritrade
+  - Barchart
+  - alphatrends
+  - BraVoCycles
+  - AlphaCapital888
+  - gabizohar
+  - Ollie_AllCaps
+  - SRxTrades
+  - NF4VS
+  - LewPayne
+  - PrimeTrading_
+  - stamatoudism
+  - AIFinPlot
+  - Stabil_Alpha
+  - JesseCohenInv
+  - AsymTrading
+  - TradeSniperSara
+  - ConcretumR
+  - RobInTheBlack
+  - SJosephBurns
+  - OptionRecommend
+  - QuantRob
+  - carlcarrie
+  - ArturSepp
+  - algoflows
+
+symbols:
+  - SPX
+  - S&P
+  - S&P 500
+  - S&P 500 Index
+  - S and P
+  - Standard & Poor's 500
+  - SPY
+  - ^GSPC
+  - SPX500
+  - S&P Global
+  - SPGI
+  - Dow
+  - DJIA
+  - Dow Jones
+  - Dow Jones U.S. Dividend 100 Index
+  - Dow Jones Global Index
+  - SPDR Dow Jones Industrial Average ETF
+  - Dow Jones Transportation Average
+  - Dow Jones Composite
+  - NASDAQ
+  - NDX
+  - NASDAQ Index
+  - NASDAQ100INDEXETF
+  - NASDAQ Composite
+  - NASDAQ 100
+  - NASDAQ 100 Index
+  - QQQ
+  - ^IXIC
+  - NASDAQ Composite Index
+  - DIA
+  - Diamonds ETF
+  - Diamonds ETF (Dow Jones Industrial Average ETF)
+  - SPY (SPDR S_P 500 ETF Trust)
+  - BTC
+  - XBT
+  - Bitcoin
+  - BTCUSD
+  - BTC/USD
+  - Bitcoin (BTC)
+  - Gold
+  - XAU
+  - Gold Futures
+  - GLD
+  - GOLD
+  - GC
+  - GC=F
+  - GOLDSPOTCFD
+  - GOLD SPOT CFD
+  - GOLDS POT
+  # ... (add more as needed)
+
+batch_size: 10
+max_concurrent_tasks: 5
+max_tweets_per_user: 20
+sentiment_threshold: 0.1 
