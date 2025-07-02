@@ -400,4 +400,38 @@ class DataFetcher:
                 "status": "error",
                 "location": location,
                 "message": str(e)
-            } 
+            }
+    
+    def download_and_store_media(self, media_items: list, username: str, date_str: str) -> list:
+        """
+        Download media files and store them in output/{date}/media/{username}/
+        Args:
+            media_items (list): List of dicts with 'media_url' and 'media_type'
+            username (str): Twitter username
+            date_str (str): Date string in YYYY-MM-DD format
+        Returns:
+            list: List of saved file paths
+        """
+        saved_files = []
+        base_dir = Path(f'output/{date_str}/media/{username}')
+        base_dir.mkdir(parents=True, exist_ok=True)
+        for item in media_items:
+            url = item.get('media_url')
+            mtype = item.get('media_type', 'media')
+            if not url:
+                continue
+            ext = '.jpg' if mtype == 'photo' else '.mp4' if mtype == 'video' else '.gif'
+            fname = url.split('/')[-1].split('?')[0]
+            if not fname.endswith((ext, '.jpeg', '.png', '.webp', '.webm')):
+                fname += ext
+            file_path = base_dir / fname
+            try:
+                resp = requests.get(url, stream=True, timeout=10)
+                if resp.status_code == 200:
+                    with open(file_path, 'wb') as f:
+                        for chunk in resp.iter_content(1024):
+                            f.write(chunk)
+                    saved_files.append(str(file_path))
+            except Exception as e:
+                logger.error(f"Failed to download media {url}: {e}")
+        return saved_files 

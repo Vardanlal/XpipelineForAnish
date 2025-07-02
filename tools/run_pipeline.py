@@ -54,15 +54,23 @@ def main():
         logger.info("Step 1: Fetching tweets...")
         fetch_results = fetcher.fetch_all_users(usernames)
         
-        # Step 2: Store raw tweets
-        logger.info("Step 2: Storing raw tweets...")
+        # Step 2: Store raw tweets and download media
+        logger.info("Step 2: Storing raw tweets and downloading media...")
         for username, result in fetch_results.items():
             if result.get("status") == "success":
+                # Store raw tweets
                 store_result = manager.store_tweet_data(result["tweets"], username, data_type='raw')
                 if store_result["status"] == "success":
                     logger.info(f"Successfully stored raw tweets for {username}")
                 else:
                     logger.warning(f"Failed to store raw tweets for {username}: {store_result['message']}")
+                # Download media
+                date_str = datetime.now().strftime('%Y-%m-%d')
+                media_info = fetcher.extract_media_from_tweets(result["tweets"])
+                all_media = media_info.get('images', []) + media_info.get('videos', []) + media_info.get('gifs', [])
+                if all_media:
+                    saved_files = fetcher.download_and_store_media(all_media, username, date_str)
+                    logger.info(f"Downloaded {len(saved_files)} media files for {username}")
             else:
                 logger.warning(f"Failed to fetch tweets for {username}: {result.get('message')}")
         

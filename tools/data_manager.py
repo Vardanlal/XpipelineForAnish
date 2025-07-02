@@ -62,15 +62,7 @@ class DataManager:
     
     def store_tweet_data(self, tweets: List[Dict], username: str, data_type: str = 'raw') -> Dict:
         """
-        Store tweet data in organized files.
-        
-        Args:
-            tweets (List[Dict]): List of tweets to store
-            username (str): Twitter username
-            data_type (str): Type of data (raw, analyzed, processed)
-            
-        Returns:
-            Dict: Storage results
+        Store tweet data in organized files under output/{date}/tweets/raw/{username}/
         """
         try:
             if not tweets:
@@ -78,29 +70,15 @@ class DataManager:
                     "status": "error",
                     "message": f"No tweets to store for {username}"
                 }
-            
-            # Create timestamp for filename
+            date_str = datetime.now().strftime('%Y-%m-%d')
+            base_dir = Path(f'output/{date_str}/tweets/raw/{username}') if data_type == 'raw' else Path(f'output/{date_str}/tweets/analyzed/{username}')
+            base_dir.mkdir(parents=True, exist_ok=True)
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
             filename = f"{username}_{data_type}_{timestamp}.json"
-            
-            # Determine storage directory
-            if data_type == 'raw':
-                storage_dir = self.base_dir / 'raw'
-            elif data_type == 'analyzed':
-                storage_dir = self.base_dir / 'analyzed'
-            elif data_type == 'processed':
-                storage_dir = self.base_dir / 'processed'
-            else:
-                storage_dir = self.base_dir / 'temp'
-            
-            filepath = storage_dir / filename
-            
-            # Store the data
+            filepath = base_dir / filename
             with open(filepath, 'w', encoding='utf-8') as f:
                 json.dump(tweets, f, ensure_ascii=False, indent=2)
-            
             logger.info(f"Stored {len(tweets)} tweets for {username} in {filepath}")
-            
             return {
                 "status": "success",
                 "message": f"Successfully stored {len(tweets)} tweets for {username}",
@@ -109,7 +87,6 @@ class DataManager:
                 "data_type": data_type,
                 "tweet_count": len(tweets)
             }
-            
         except Exception as e:
             logger.error(f"Error storing tweet data for {username}: {str(e)}")
             return {
@@ -119,32 +96,24 @@ class DataManager:
     
     def store_analysis_results(self, analysis_data: Dict, username: str) -> Dict:
         """
-        Store analysis results for a user.
-        
-        Args:
-            analysis_data (Dict): Analysis results to store
-            username (str): Twitter username
-            
-        Returns:
-            Dict: Storage results
+        Store analysis results for a user under output/{date}/tweets/analyzed/{username}/
         """
         try:
+            date_str = datetime.now().strftime('%Y-%m-%d')
+            base_dir = Path(f'output/{date_str}/tweets/analyzed/{username}')
+            base_dir.mkdir(parents=True, exist_ok=True)
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
             filename = f"{username}_analysis_{timestamp}.json"
-            filepath = self.base_dir / 'analyzed' / filename
-            
+            filepath = base_dir / filename
             with open(filepath, 'w', encoding='utf-8') as f:
                 json.dump(analysis_data, f, ensure_ascii=False, indent=2)
-            
             logger.info(f"Stored analysis results for {username} in {filepath}")
-            
             return {
                 "status": "success",
                 "message": f"Successfully stored analysis results for {username}",
                 "filepath": str(filepath),
                 "filename": filename
             }
-            
         except Exception as e:
             logger.error(f"Error storing analysis results for {username}: {str(e)}")
             return {
